@@ -8,7 +8,7 @@ This project starts with an operations question, not a dashboard: **what causes 
 
 ## Open the dashboard
 
-**[Launch interactive dashboard](dashboard/index.html)** — download the repository and open `dashboard/index.html` directly in a browser. It works without running Python or connecting to the internet.
+**[Launch interactive dashboard](https://ishgup22.github.io/Lending-Operations-Process-Improvement/dashboard/index.html)** — download the repository and open `dashboard/index.html` directly in a browser. It works without running Python or connecting to the internet.
 
 The dashboard allows you to filter by **business segment, operations team and reporting month** and adjust scenario assumptions to see how potential review-hour savings change. It includes a live KPI overview, monthly operating-performance trend, segment exception comparison, root-cause view, team SLA comparison and an implementation recommendation.
 
