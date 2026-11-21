@@ -1,0 +1,16 @@
+{
+  "dataset": "Synthetic loan operations; not actual TD or bank customer data",
+  "cases": 25000,
+  "exceptions": 4592,
+  "exception_rate": 18.37,
+  "first_pass_rate": 81.63,
+  "sla_breach_rate": 9.44,
+  "median_processing_hours": 15.2,
+  "total_review_hours": 7820.9,
+  "eligible_exceptions": 3347,
+  "scenario_prevention_assumption_pct": 45.0,
+  "scenario_avoidable_minutes_per_prevented_exception": 24,
+  "scenario_prevented_exceptions_est": 1506,
+  "scenario_review_hours_saved_est": 602.5,
+  "scenario_review_effort_reduction_pct": 7.7
+}

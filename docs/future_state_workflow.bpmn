@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_LendingControls" targetNamespace="https://example.org/lending-controls">
+  <bpmn:process id="Process_UpstreamValidation" name="Proposed Loan Intake and Exception Validation" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_CaseReceived" name="Case received"><bpmn:outgoing>Flow_1</bpmn:outgoing></bpmn:startEvent>
+    <bpmn:task id="Task_Validate" name="Validate documents, identifiers, duplicate signals"><bpmn:incoming>Flow_1</bpmn:incoming><bpmn:outgoing>Flow_2</bpmn:outgoing></bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_Result" name="Validation status"><bpmn:incoming>Flow_2</bpmn:incoming><bpmn:outgoing>Flow_Pass</bpmn:outgoing><bpmn:outgoing>Flow_Fix</bpmn:outgoing><bpmn:outgoing>Flow_Review</bpmn:outgoing></bpmn:exclusiveGateway>
+    <bpmn:task id="Task_StandardReview" name="Complete standard case review"><bpmn:incoming>Flow_Pass</bpmn:incoming><bpmn:incoming>Flow_Override</bpmn:incoming><bpmn:outgoing>Flow_Close</bpmn:outgoing></bpmn:task>
+    <bpmn:task id="Task_AskCorrection" name="Request correction with reason"><bpmn:incoming>Flow_Fix</bpmn:incoming><bpmn:incoming>Flow_Denied</bpmn:incoming><bpmn:outgoing>Flow_Resubmit</bpmn:outgoing></bpmn:task>
+    <bpmn:task id="Task_ExceptionReview" name="Review ambiguous exception"><bpmn:incoming>Flow_Review</bpmn:incoming><bpmn:outgoing>Flow_Decide</bpmn:outgoing></bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_Override" name="Approved override?"><bpmn:incoming>Flow_Decide</bpmn:incoming><bpmn:outgoing>Flow_Override</bpmn:outgoing><bpmn:outgoing>Flow_Denied</bpmn:outgoing></bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Resubmit" name="Correct and resubmit"><bpmn:incoming>Flow_Resubmit</bpmn:incoming><bpmn:outgoing>Flow_Loop</bpmn:outgoing></bpmn:task>
+    <bpmn:task id="Task_Log" name="Record outcome and KPIs"><bpmn:incoming>Flow_Close</bpmn:incoming><bpmn:outgoing>Flow_End</bpmn:outgoing></bpmn:task>
+    <bpmn:endEvent id="EndEvent_Completed" name="Case complete"><bpmn:incoming>Flow_End</bpmn:incoming></bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_CaseReceived" targetRef="Task_Validate"/>
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Validate" targetRef="Gateway_Result"/>
+    <bpmn:sequenceFlow id="Flow_Pass" name="Pass" sourceRef="Gateway_Result" targetRef="Task_StandardReview"/>
+    <bpmn:sequenceFlow id="Flow_Fix" name="Fixable" sourceRef="Gateway_Result" targetRef="Task_AskCorrection"/>
+    <bpmn:sequenceFlow id="Flow_Review" name="Ambiguous" sourceRef="Gateway_Result" targetRef="Task_ExceptionReview"/>
+    <bpmn:sequenceFlow id="Flow_Decide" sourceRef="Task_ExceptionReview" targetRef="Gateway_Override"/>
+    <bpmn:sequenceFlow id="Flow_Override" name="Yes" sourceRef="Gateway_Override" targetRef="Task_StandardReview"/>
+    <bpmn:sequenceFlow id="Flow_Denied" name="No" sourceRef="Gateway_Override" targetRef="Task_AskCorrection"/>
+    <bpmn:sequenceFlow id="Flow_Resubmit" sourceRef="Task_AskCorrection" targetRef="Task_Resubmit"/>
+    <bpmn:sequenceFlow id="Flow_Loop" sourceRef="Task_Resubmit" targetRef="Task_Validate"/>
+    <bpmn:sequenceFlow id="Flow_Close" sourceRef="Task_StandardReview" targetRef="Task_Log"/>
+    <bpmn:sequenceFlow id="Flow_End" sourceRef="Task_Log" targetRef="EndEvent_Completed"/>
+  </bpmn:process>
+</bpmn:definitions>
